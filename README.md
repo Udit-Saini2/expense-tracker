@@ -17,9 +17,7 @@ A clean, practical web app built with **Streamlit** — live and ready to use.
 - Currency selection with basic conversion support
 
 ## Live Demo
-
-🌐 **Live App:** [https://your-app-name.streamlit.app](expense-tracker-86t3njzbpqrnvsnpdndav8)  
-*(Replace with your actual Streamlit Cloud URL)*
+Live: [expense-tracker-86t3njzbpqrnvsnpdndav8.streamlit.app](https://expense-tracker-86t3njzbpqrnvsnpdndav8.streamlit.app)
 
 ## Screenshots
 ###Login / Sign Up page / Forget password
