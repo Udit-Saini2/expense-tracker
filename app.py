@@ -10,6 +10,69 @@ from email.mime.text import MIMEText
 import bcrypt
 import os
 
+# ────────────────────────────────────────────────
+# DATABASE – Create tables automatically at startup
+# ────────────────────────────────────────────────
+
+conn = sqlite3.connect('tracker.db')
+c = conn.cursor()
+
+# Users
+c.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        email TEXT PRIMARY KEY,
+        name TEXT,
+        password_hash TEXT
+    )
+''')
+
+# Expenses
+c.execute('''
+    CREATE TABLE IF NOT EXISTS expenses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_email TEXT,
+        date TEXT,
+        category TEXT,
+        amount REAL,
+        description TEXT,
+        receipt_path TEXT,
+        is_recurring INTEGER DEFAULT 0,
+        frequency TEXT,
+        next_date TEXT,
+        deleted_at TEXT,
+        FOREIGN KEY (user_email) REFERENCES users(email)
+    )
+''')
+
+# Incomes – this fixes your error
+c.execute('''
+    CREATE TABLE IF NOT EXISTS incomes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_email TEXT,
+        date TEXT,
+        source TEXT,
+        amount REAL,
+        description TEXT,
+        is_recurring INTEGER DEFAULT 0,
+        frequency TEXT,
+        next_date TEXT,
+        FOREIGN KEY (user_email) REFERENCES users(email)
+    )
+''')
+
+# Category budgets
+c.execute('''
+    CREATE TABLE IF NOT EXISTS category_budgets (
+        month_year TEXT,
+        category TEXT,
+        amount REAL,
+        PRIMARY KEY (month_year, category)
+    )
+''')
+
+conn.commit()
+conn.close()
+
 # Session State
 # ───────────────────────────────────────────────
 if 'user_email' not in st.session_state:
@@ -751,4 +814,5 @@ elif page == "Settings":
                 st.error("Please save Gmail and App Password first")
 
 # Clean footer
+
 st.sidebar.caption("")
